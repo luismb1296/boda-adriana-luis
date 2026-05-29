@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RSVP · Adriana & Luis</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --olive: #5a6b47;
+    --olive-dark: #3f4e31;
+    --olive-light: #7a8f63;
+    --linen: #f0ebe2;
+    --linen-dark: #e2dace;
+    --cream: #faf7f2;
+    --text: #2c2c2c;
+    --text-light: #6b6b6b;
+  }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background-color: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page-wrap {
+    width: 100%;
+    max-width: 520px;
+    position: relative;
+    z-index: 1;
+    animation: fadeUp 0.9s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .ornament {
+    text-align: center;
+    margin-bottom: 1.2rem;
+    color: var(--olive-light);
+    font-size: 1.1rem;
+    letter-spacing: 0.3em;
+  }
+
+  .header {
+    background: var(--olive);
+    color: white;
+    text-align: center;
+    padding: 2.8rem 2rem 2.4rem;
+    position: relative;
+  }
+
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0; right: 0;
+    height: 28px;
+    background: var(--linen);
+    clip-path: ellipse(55% 100% at 50% 100%);
+  }
+
+  .header-eyebrow {
+    font-family: 'Jost', sans-serif;
+    font-weight: 200;
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    opacity: 0.75;
+    margin-bottom: 0.8rem;
+  }
+
+  .header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 2.8rem;
+    line-height: 1.1;
+    letter-spacing: 0.02em;
+  }
+
+  .header h1 span { font-style: italic; }
+
+  .header-amp {
+    display: block;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.4rem;
+    opacity: 0.7;
+    margin: 0.3rem 0;
+  }
+
+  .header-date {
+    margin-top: 1rem;
+    font-family: 'Jost', sans-serif;
+    font-weight: 200;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    opacity: 0.8;
+  }
+
+  .card {
+    background: var(--linen);
+    padding: 2.5rem 2.2rem 2.2rem;
+    border-bottom: 3px solid var(--olive);
+  }
+
+  .card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--olive-dark);
+    text-align: center;
+    margin-bottom: 1.8rem;
+  }
+
+  .step { display: none; }
+  .step.active { display: block; animation: fadeUp 0.5s ease both; }
+
+  .field { margin-bottom: 1.2rem; }
+
+  label {
+    display: block;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--olive-dark);
+    margin-bottom: 0.5rem;
+    font-weight: 300;
+  }
+
+  input[type="text"], select {
+    width: 100%;
+    background: var(--cream);
+    border: 1px solid var(--linen-dark);
+    border-bottom: 2px solid var(--olive-light);
+    padding: 0.75rem 1rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  input[type="text"]:focus, select:focus {
+    border-color: var(--olive);
+    background: white;
+  }
+
+  .select-wrap { position: relative; }
+  .select-wrap::after {
+    content: '↓';
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--olive);
+    pointer-events: none;
+    font-size: 0.9rem;
+  }
+
+  .options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.7rem;
+    margin-top: 0.5rem;
+  }
+
+  .option-btn {
+    background: var(--cream);
+    border: 1px solid var(--linen-dark);
+    border-bottom: 2px solid var(--linen-dark);
+    padding: 0.9rem 0.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    color: var(--text-light);
+  }
+
+  .option-btn:hover { border-color: var(--olive-light); color: var(--olive-dark); }
+  .option-btn.selected { background: var(--olive); border-color: var(--olive); color: white; }
+
+  .option-btn .opt-label {
+    display: block;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 0.2rem;
+    opacity: 0.8;
+  }
+
+  .option-btn .opt-value { font-size: 1.4rem; font-weight: 600; }
+
+  .btn {
+    width: 100%;
+    background: var(--olive);
+    color: white;
+    border: none;
+    padding: 1rem;
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-top: 1.5rem;
+    transition: background 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn:hover { background: var(--olive-dark); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .btn-loading::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+    animation: shimmer 1s infinite;
+  }
+
+  @keyframes shimmer {
+    from { transform: translateX(-100%); }
+    to   { transform: translateX(100%); }
+  }
+
+  .success-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid var(--olive);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-size: 1.4rem;
+    color: var(--olive);
+    animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+
+  @keyframes popIn {
+    from { transform: scale(0); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+
+  .success-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 300;
+    text-align: center;
+    color: var(--olive-dark);
+    margin-bottom: 0.8rem;
+  }
+
+  .success-sub {
+    font-size: 0.8rem;
+    text-align: center;
+    color: var(--text-light);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .sorry-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 300;
+    text-align: center;
+    color: var(--text-light);
+    margin-bottom: 0.8rem;
+  }
+
+  .already-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 300;
+    text-align: center;
+    color: var(--olive-dark);
+    margin-bottom: 0.8rem;
+  }
+
+  .note {
+    font-size: 0.68rem;
+    text-align: center;
+    color: var(--text-light);
+    margin-top: 1.2rem;
+    letter-spacing: 0.05em;
+    font-weight: 300;
+  }
+
+  .note strong { color: var(--olive); font-weight: 400; }
+
+  .footer-ornament {
+    text-align: center;
+    margin-top: 1.5rem;
+    color: var(--olive-light);
+    font-size: 0.9rem;
+    letter-spacing: 0.4em;
+    opacity: 0.6;
+  }
+
+  .hint {
+    font-size: 0.72rem;
+    color: var(--text-light);
+    margin-top: 0.4rem;
+    font-weight: 300;
+  }
+
+  .error-msg {
+    color: #b85c5c;
+    font-size: 0.68rem;
+    margin-top: 0.4rem;
+    letter-spacing: 0.05em;
+  }
+
+  /* Countdown */
+  .countdown {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+    margin: 1.4rem 0 0.5rem;
+  }
+
+  .countdown-item {
+    text-align: center;
+  }
+
+  .countdown-num {
+    display: block;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 300;
+    color: white;
+    line-height: 1;
+    letter-spacing: 0.02em;
+  }
+
+  .countdown-label {
+    display: block;
+    font-family: 'Jost', sans-serif;
+    font-weight: 200;
+    font-size: 0.55rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    margin-top: 0.3rem;
+  }
+
+  .countdown-divider {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    color: rgba(255,255,255,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 1rem;
+  }
+
+  
+  .music-btn:not(.playing) .icon-play { display: block; }
+  .music-btn:not(.playing) .icon-pause { display: none; }
+
+  
+</style>
+</head>
+<body>
+
+<div class="page-wrap">
+  <div class="ornament">— ✦ —</div>
+
+  <div class="header">
+    <div class="header-eyebrow">Confirmación de asistencia</div>
+    <h1><span>Adriana</span><em class="header-amp">&amp;</em><span>Luis</span></h1>
+    <div class="header-date">Sábado · 9 de Enero · 2027</div>
+    <div class="countdown" id="countdown">
+      <div class="countdown-item">
+        <span class="countdown-num" id="cd-days">--</span>
+        <span class="countdown-label">Días</span>
+      </div>
+      <div class="countdown-item">
+        <span class="countdown-num" id="cd-hours">--</span>
+        <span class="countdown-label">Horas</span>
+      </div>
+      <div class="countdown-item">
+        <span class="countdown-num" id="cd-mins">--</span>
+        <span class="countdown-label">Minutos</span>
+      </div>
+      <div class="countdown-item">
+        <span class="countdown-num" id="cd-secs">--</span>
+        <span class="countdown-label">Segundos</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">RSVP</div>
+
+    <!-- STEP 1: Nombre -->
+    <div class="step active" id="step1">
+      <div class="field">
+        <label>Tu nombre completo</label>
+        <input type="text" id="nombre" placeholder="Escribe tu nombre…" autocomplete="off" />
+        <div class="hint">Tal como aparece en tu invitación</div>
+        <div class="error-msg" id="nombre-error"></div>
+      </div>
+      <button class="btn" id="btn-step1" onclick="goStep2()">Continuar</button>
+    </div>
+
+    <!-- STEP 2: Asistencia -->
+    <div class="step" id="step2">
+      <div class="field">
+        <label>¿Nos acompañarás el 9 de enero?</label>
+        <div class="options">
+          <div class="option-btn" id="opt-si" onclick="selectAsistencia('si')">
+            <span class="opt-label">Con gusto</span>
+            <span class="opt-value">Sí</span>
+          </div>
+          <div class="option-btn" id="opt-no" onclick="selectAsistencia('no')">
+            <span class="opt-label">Lo siento</span>
+            <span class="opt-value">No</span>
+          </div>
+        </div>
+        <div class="error-msg" id="asistencia-error"></div>
+      </div>
+      <button class="btn" onclick="goStep3()">Continuar</button>
+    </div>
+
+    <!-- STEP 3: Personas -->
+    <div class="step" id="step3">
+      <div class="field">
+        <label>¿Cuántas personas asistirán (incluyéndote)?</label>
+        <div class="select-wrap">
+          <select id="personas">
+            <option value="">Selecciona…</option>
+          </select>
+        </div>
+        <div class="error-msg" id="personas-error"></div>
+      </div>
+      <button class="btn" id="btn-enviar" onclick="enviar()">Confirmar asistencia</button>
+    </div>
+
+    <!-- STEP 3b: No asiste -->
+    <div class="step" id="step3b">
+      <p style="font-family:'Cormorant Garamond',serif; font-size:1.1rem; color:var(--text-light); text-align:center; line-height:1.8; margin-bottom:1.5rem;">
+        Gracias por avisarnos, <span id="nombre-no"></span>.<br>Te tendremos en mente desde lejos. 🤍
+      </p>
+      <button class="btn" id="btn-enviar-no" onclick="enviarNo()">Enviar respuesta</button>
+    </div>
+
+    <!-- STEP 4: Éxito Sí -->
+    <div class="step" id="step-success">
+      <div class="success-icon">✦</div>
+      <div class="success-title" id="success-title">¡Te esperamos!</div>
+      <p class="success-sub" id="success-msg">Tu confirmación ha sido registrada.<br>Será un honor tenerte en este día tan especial.</p>
+    </div>
+
+    <!-- STEP 4b: Éxito No -->
+    <div class="step" id="step-sorry">
+      <div class="success-icon" style="border-color: var(--text-light); color: var(--text-light)">♡</div>
+      <div class="sorry-title">Lo entendemos</div>
+      <p class="success-sub">Gracias por avisarnos.<br>Te tendremos en mente desde lejos.</p>
+    </div>
+
+    <!-- STEP ya confirmó -->
+    <div class="step" id="step-already">
+      <div class="success-icon">✦</div>
+      <div class="already-title" id="already-title">¡Ya confirmaste!</div>
+      <p class="success-sub" id="already-msg">Ya tenemos registrada tu confirmación.<br>Si crees que hay un error, contáctanos directamente.</p>
+    </div>
+
+  </div>
+
+  <p class="note">Confirma antes del <strong>15 de julio</strong> · *No niños</p>
+  <div class="footer-ornament">— ✦ —</div>
+</div>
+
+<script>
+  const FORM_URL  = "https://docs.google.com/forms/d/e/1FAIpQLSeufnGxIt0Ha0hce3Z-gQ8qM7B1z1I8fwQLYzBbpY6zUU3u9A/formResponse";
+  const SHEET_API = "https://script.google.com/macros/s/AKfycbyIxxp3Ky9S5WXQhPnsd1aYp-XVZjrTRqaZtMXeA_ejY1joba610CQM9Vhkmp2IgS0OYg/exec";
+  const FIELDS = {
+    nombre:     "entry.1502276816",
+    asistencia: "entry.18972673",
+    personas:   "entry.1937588825",
+  };
+
+  let asistencia  = null;
+  let nombreVal   = "";
+  let personasMax = 4;
+
+  function showStep(id) {
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  async function goStep2() {
+    nombreVal = document.getElementById('nombre').value.trim();
+    if (!nombreVal) {
+      document.getElementById('nombre-error').textContent = 'Por favor escribe tu nombre';
+      return;
+    }
+
+    const btn = document.getElementById('btn-step1');
+    btn.textContent = 'Verificando…';
+    btn.disabled = true;
+    btn.classList.add('btn-loading');
+
+    try {
+      const res  = await fetch(`${SHEET_API}?accion=buscar&nombre=${encodeURIComponent(nombreVal)}`);
+      const data = await res.json();
+
+      if (!data.personas) {
+        document.getElementById('nombre-error').textContent = 'No encontramos tu nombre en la lista. Verifícalo e intenta de nuevo.';
+        btn.textContent = 'Continuar';
+        btn.disabled = false;
+        btn.classList.remove('btn-loading');
+        return;
+      }
+
+      // Ya confirmó antes
+      if (data.yaConfirmo) {
+        document.getElementById('already-title').textContent = `¡${nombreVal.split(' ')[0]}, ya confirmaste!`;
+        document.getElementById('already-msg').textContent = 'Ya tenemos registrada tu confirmación. Si crees que hay un error, contáctanos directamente.';
+        btn.textContent = 'Continuar';
+        btn.disabled = false;
+        btn.classList.remove('btn-loading');
+        showStep('step-already');
+        return;
+      }
+
+      personasMax = parseInt(data.personas);
+    } catch(e) {
+      personasMax = 4;
+    }
+
+    // Llenar selector con opciones permitidas
+    const select = document.getElementById('personas');
+    select.innerHTML = '<option value="">Selecciona…</option>';
+    for (let i = 1; i <= personasMax; i++) {
+      select.innerHTML += `<option value="${i}">${i} ${i === 1 ? 'persona' : 'personas'}</option>`;
+    }
+
+    document.getElementById('nombre-error').textContent = '';
+    btn.textContent = 'Continuar';
+    btn.disabled = false;
+    btn.classList.remove('btn-loading');
+    showStep('step2');
+  }
+
+  function selectAsistencia(val) {
+    asistencia = val;
+    document.getElementById('opt-si').classList.toggle('selected', val === 'si');
+    document.getElementById('opt-no').classList.toggle('selected', val === 'no');
+  }
+
+  function goStep3() {
+    if (!asistencia) {
+      document.getElementById('asistencia-error').textContent = 'Por favor selecciona una opción';
+      return;
+    }
+    document.getElementById('asistencia-error').textContent = '';
+    if (asistencia === 'no') {
+      document.getElementById('nombre-no').textContent = nombreVal.split(' ')[0];
+    }
+    showStep(asistencia === 'si' ? 'step3' : 'step3b');
+  }
+
+  function buildFormData(fields) {
+    const fd = new FormData();
+    for (const [key, val] of Object.entries(fields)) fd.append(key, val);
+    return fd;
+  }
+
+  async function submitToGoogle(personas, asistenciaTexto) {
+    // Todo se maneja desde el Apps Script (Sheet + Form)
+    try {
+      await fetch(`${SHEET_API}?accion=confirmar&nombre=${encodeURIComponent(nombreVal)}&personas=${parseInt(personas)}&asistencia=${encodeURIComponent(asistenciaTexto)}`);
+    } catch(e) {}
+  }
+
+  async function enviar() {
+    const personas = document.getElementById('personas').value;
+    if (!personas) {
+      document.getElementById('personas-error').textContent = 'Por favor selecciona el número de personas';
+      return;
+    }
+    document.getElementById('personas-error').textContent = '';
+
+    const btn = document.getElementById('btn-enviar');
+    btn.textContent = 'Enviando…';
+    btn.disabled = true;
+    btn.classList.add('btn-loading');
+
+    await submitToGoogle(personas, 'Sí');
+
+    document.getElementById('success-title').textContent = `¡Te esperamos, ${nombreVal.split(' ')[0]}!`;
+    document.getElementById('success-msg').innerHTML =
+      `Tu confirmación para <strong>${personas} ${personas === '1' ? 'persona' : 'personas'}</strong> ha sido registrada.<br>Será un honor tenerte en este día tan especial.`;
+    showStep('step-success');
+  }
+
+  async function enviarNo() {
+    const btn = document.getElementById('btn-enviar-no');
+    btn.textContent = 'Enviando…';
+    btn.disabled = true;
+
+    await submitToGoogle(0, 'No');
+
+    showStep('step-sorry');
+  }
+
+  document.getElementById('nombre').addEventListener('keydown', e => {
+    if (e.key === 'Enter') goStep2();
+  });
+
+  // Countdown timer
+  function updateCountdown() {
+    const wedding = new Date('2027-01-09T18:00:00');
+    const now = new Date();
+    const diff = wedding - now;
+
+    if (diff <= 0) {
+      document.getElementById('countdown').innerHTML = '<p style="color:white;font-family:Cormorant Garamond,serif;font-size:1.2rem;text-align:center;grid-column:1/-1">¡Hoy es el gran día! 🎉</p>';
+      return;
+    }
+
+    const days  = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const mins  = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const secs  = Math.floor((diff % (1000 * 60)) / 1000);
+
+    document.getElementById('cd-days').textContent  = String(days).padStart(2, '0');
+    document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
+    document.getElementById('cd-mins').textContent  = String(mins).padStart(2, '0');
+    document.getElementById('cd-secs').textContent  = String(secs).padStart(2, '0');
+  }
+
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+
+  
+</script>
+
+
+
+
+</body>
+</html>
